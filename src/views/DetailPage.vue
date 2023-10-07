@@ -7,8 +7,9 @@
     <div class="board-detail">
       <div class="board-titles">
         <div class="board-title">
-          {{ detail.btitle }}<button v-on:click="update">수정</button>
-          <button v-on:click="deletepost">삭제</button>
+          {{ detail.btitle }}
+          <button v-if="detail.m_id == this.$store.getters.getUserId" v-on:click="update">수정</button>
+          <button v-if="detail.m_id == this.$store.getters.getUserId" v-on:click="deletepost">삭제</button>
         </div>
         <div class="detail-like" v-text="detail.blike"></div>
       </div>
@@ -18,12 +19,12 @@
       </div>
       <div class="board-content" v-html="detail.bcontent"></div>
     </div>
-    <div class="comment">
+    <div v-if="this.userInfo.m_name != null" class="comment">
       <textarea v-model="comment"></textarea>
       <button @click="commentWrite">댓글쓰기</button>
     </div>
     <div>
-      <button v-on:click="board">게시판으로</button>
+      <button v-if="this.userInfo.m_name != null" v-on:click="board">게시판으로</button>
     </div>
 
     <div class="commentList">
@@ -31,8 +32,8 @@
         <div class="comment-head">
           <div class="comment-name">
             {{ c.m_name }}
-            <button @click="commentUpdate(`${c.c_no}`)">수정</button>
-            <button @click="commentDel(`${c.c_no}`)">삭제</button>
+            <button v-if="c.m_id == this.$store.getters.getUserId" @click="commentUpdate(`${c.c_no}`)">수정</button>
+            <button v-if="c.m_id == this.$store.getters.getUserId" @click="commentDel(`${c.c_no}`)">삭제</button>
           </div>
           <div class="comment-date">
             <i class="xi-time-o"></i>{{ c.c_date }}
@@ -60,9 +61,14 @@ export default {
         bdate: "",
         m_name: "",
         blike: "",
+        m_id:"",
       },
       commentsList: [],
       comment: null,
+      userInfo: {
+        m_name: this.$store.getters.getUserName,
+        m_id: this.$store.getters.getUserId,
+      }
     };
   },
   mounted() {
@@ -99,6 +105,7 @@ export default {
       let commentData = {};
       commentData.bno = this.$route.query.bno;
       commentData.comment = this.comment;
+      commentData.m_id = this.userInfo.m_id;
       this.$axios
         .post(this.$server + "/commentWrite", JSON.stringify(commentData), {
           headers: { "Content-Type": "application/json" },
@@ -118,7 +125,7 @@ export default {
           }
         })
         .catch((err) => {
-          alert("문제가 발생했습니다." + err);
+          alert("문제가 발생했습니다. 요기?" + err);
         });
     },
     board() {

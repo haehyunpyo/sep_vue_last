@@ -13,15 +13,33 @@ export default {
     return {
       title: null,
       content: null,
+      userInfo: {
+        m_name: this.$store.getters.getUserName,
+        m_id: this.$store.getters.getUserId,
+      },
     };
   },
+
+  mounted() { //로딩과 함께 호출됩니다.
+    this.loginCheck();
+  },
+
   methods: {
+    //로그인 검사해주세요.
+    loginCheck(){
+      if(this.$store.getters.getUserId == null){
+        alert("로그인하세요");
+        this.$router.push("login");
+      }
+    },
+
     write() {
       let saveData = {};
       saveData.title = this.title;
       saveData.content = this.content;
+      saveData.m_id = this.userInfo.m_id;
       this.$axios
-        .post(this.$server+'/write', JSON.stringify(saveData), {
+        .post(this.$server + "/write", JSON.stringify(saveData), {
           headers: { "Content-Type": "application/json" },
         })
         .then((res) => {
