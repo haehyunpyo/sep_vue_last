@@ -4,7 +4,7 @@
     href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css"
   />
   <div>
-    <h1>board : {{ this.userInfo.m_name }}</h1>
+    <h1>board : {{ this.userInfo.m_id }}</h1>
     <table>
       <thead>
         <tr>
@@ -18,8 +18,10 @@
         <tr v-for="n in list" v-bind:key="n.bno">
           <td class="title">
             <a v-on:click="viewDetail(`${n.bno}`)"
-              >{{ n.bno}}. {{ n.btitle }} 
-              <span v-if="n.commentcount > 0">&nbsp;<i class="xi-comment"></i>{{ n.commentcount }}</span>
+              >{{ n.bno }}. {{ n.btitle }}
+              <span v-if="n.commentcount > 0"
+                >&nbsp;<i class="xi-comment"></i>{{ n.commentcount }}</span
+              >
             </a>
           </td>
           <td>{{ n.m_name }}</td>
@@ -87,8 +89,8 @@ export default {
       pageList: [],
       userInfo: {
         m_name: this.$store.getters.getUserName,
-        m_id: this.$store.getters.getUSerId,
-      }
+        m_id: this.$store.getters.getUserId,
+      },
     };
   },
   mounted() {
@@ -99,8 +101,10 @@ export default {
       //페이징 관련 일을 여기에서 처리합니다.
       this.totalcount = totalcount;
       this.totalPage = Math.ceil(this.totalcount / 10);
-      this.startPage = this.pageNo / 11 > 0 ? parseInt(this.pageNo / 11) * 10 + 1 : 1;
-      this.endPage = this.startPage + 10 > this.totalPage ? (this.totalPage + 10) % 10 : 10;
+      this.startPage =
+        this.pageNo / 11 > 0 ? parseInt(this.pageNo / 11) * 10 + 1 : 1;
+      this.endPage =
+        this.startPage + 10 > this.totalPage ? (this.totalPage + 10) % 10 : 10;
       this.pageList = [];
       for (let i = 0; i < this.endPage; i++) {
         this.pageList[i] = this.startPage + i;
@@ -128,7 +132,12 @@ export default {
       });
     },
     write() {
-      this.$router.push("write");
+      if (this.userInfo.m_id == null) {
+        alert(this.userInfo.m_id);
+        this.$router.push("login");
+      } else {
+        this.$router.push("write");
+      }
     },
   },
 };

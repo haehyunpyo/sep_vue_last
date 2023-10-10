@@ -43,7 +43,7 @@
       <tbody>
         <tr v-for="n in members" v-bind:key="n.bno">
           <td class="title">
-            <a v-on:click="viewDetail(`${n.bno}`)">{{ n.m_id }}</a>
+            {{ n.m_id }}
           </td>
           <td>{{ n.m_joindate }}</td>
         </tr>
@@ -60,6 +60,7 @@ export default {
             list:[],
             members:[],
             cmtTop5:[],
+            requestBody: this.$route.query,
         }
     },
     mounted(){
@@ -76,6 +77,14 @@ export default {
             .catch((err) => {
                 alert("에러발생" + err);
             });
+        },
+        viewDetail(bno){
+          //alert(bno);
+          this.requestBody.bno = bno;
+          this.$router.push({
+            path:'./detail',
+            query: this.requestBody,
+          });
         }
     }
 }

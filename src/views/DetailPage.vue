@@ -23,8 +23,8 @@
       <textarea v-model="comment"></textarea>
       <button @click="commentWrite">댓글쓰기</button>
     </div>
-    <div>
-      <button v-if="this.userInfo.m_name != null" v-on:click="board">게시판으로</button>
+    <div v-if="this.userInfo.m_name != null">
+      <button v-on:click="board">게시판으로</button>
     </div>
 
     <div class="commentList">

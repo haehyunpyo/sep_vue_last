@@ -2,6 +2,7 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   outputDir: 'C:/eGovFrameDev-4.1.0-64bit/workspace/sep19/src/main/resources/static',
+
   devServer: {
     proxy: {
       '/': {
@@ -10,5 +11,11 @@ module.exports = defineConfig({
       ws: false,  // 웹소켓 기능 끔
       }
     }
+  },
+
+  pluginOptions: {
+    vuetify: {
+			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+		}
   }
 })

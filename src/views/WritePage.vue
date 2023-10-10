@@ -31,6 +31,7 @@ export default {
         alert("로그인하세요");
         this.$router.push("login");
       }
+
     },
 
     write() {
